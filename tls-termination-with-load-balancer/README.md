@@ -42,7 +42,7 @@ tap_gui:
         - host: *.INGRESS_DOMAIN
 ```
 
-Apply [this overlay](overlay-cnrs-config-network.yaml) in your cluster:
+Deploy [this overlay](overlay-cnrs-config-network.yaml) to your cluster:
 
 ```yaml
 apiVersion: v1

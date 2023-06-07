@@ -12,7 +12,7 @@ environments:
 
 ## Solution
 
-Apply [this overlay](overlay-ootb-templates-airgapped.yaml) in your cluster:
+Deploy [this overlay](overlay-ootb-templates-airgapped.yaml) to your cluster:
 
 ```yaml
 apiVersion: v1
