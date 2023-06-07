@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: overlay-cnrs-config-network
+  namespace: tap-install
+type: Opaque
+stringData:
+  overlay-cnrs-config-network.yml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.subset({"metadata":{"name":"config-network"}, "kind": "ConfigMap"})
+    ---
+    data:
+      #@overlay/match missing_ok=True
+      default-external-scheme: https

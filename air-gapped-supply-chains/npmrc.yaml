@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: npmrc
+type: service.binding/npmrc
+stringData:
+  type: npmrc
+  provider: sample
+  .npmrc: |
+    registry=https://my-mirror.repo.corp
