@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: overlay-ootb-templates-skip-tls
+  namespace: tap-install
+type: Opaque
+stringData:
+  skip-tls-git-writer.yml: |
+    #@ load("@ytt:overlay", "overlay")
+
+    #@overlay/match by=overlay.subset({"kind":"ClusterTask", "metadata": {"name": "git-writer"}})
+    ---
+    spec:
+        steps:
+        #@overlay/match by=overlay.index(0)
+        - name: git-clone-and-push
+          #@overlay/replace via=lambda left, right: left.replace("cd `mktemp -d`", "cd `mktemp -d` && git config --global http.sslVerify false")
+          script:
