@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: overlay-ootb-templates-app-overlays
+  namespace: tap-install
+  annotations:
+    kapp.k14s.io/change-group: pkgi
+stringData:
+  overlay-ootb-templates-app-overlays.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@ load("@ytt:yaml", "yaml")
+
+    #@ def appOverlays():
+    - inline:
+        pathsFrom:
+        - secretRef:
+            name: app-overlays
+    #@ end
+
+    #@ def indent(str, size):
+    #@   strLines = []
+    #@   indentStr = "  " * size
+    #@   for line in str.splitlines():
+    #@     strLines.append(indentStr + line)
+    #@   end
+    #@   return "\n".join(strLines)
+    #@ end
+
+    #@overlay/match by=overlay.subset({"kind":"ClusterDeploymentTemplate", "metadata": {"name": "app-deploy"}})
+    ---
+    spec:
+        #@overlay/replace via=lambda left, right: left.replace("fetch:\n", "fetch:\n" + indent(yaml.encode(appOverlays()), 2) + "\n")
+        ytt:

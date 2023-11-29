@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-overlays
+stringData:
+  overlay-app-delayed-probes.yaml: |
+    #@ load("@ytt:overlay", "overlay")
+    #@overlay/match by=overlay.subset({"kind":"Deployment"}), expects="0+"
+    ---
+    spec:
+      template:
+        spec:
+          containers:
+          #@overlay/match by=overlay.index(0)
+          - name: workload
+            #@overlay/match-child-defaults missing_ok=True
+            livenessProbe:
+              initialDelaySeconds: 30
+            #@overlay/match-child-defaults missing_ok=True
+            readinessProbe:
+              initialDelaySeconds: 30
+            #@overlay/match-child-defaults missing_ok=True
+            startupProbe:
+              initialDelaySeconds: 30
